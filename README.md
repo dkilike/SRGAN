@@ -1,3 +1,7 @@
+## Editted to make suitable for Greyscale images
+
+link found in https://github.com/dkilike/SRGAN
+
 ## Super Resolution Examples
 
 We run this script under [TensorFlow](https://www.tensorflow.org) 1.2 and the self-contained [TensorLayer](http://tensorlayer.readthedocs.io/en/latest/). If you got error, you may need to update TensorLayer.
