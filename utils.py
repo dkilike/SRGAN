@@ -6,6 +6,7 @@ from tensorlayer.prepro import *
 # img_path = config.TRAIN.img_path
 
 import scipy
+import scipy.misc
 import numpy as np
 
 def get_imgs_fn(file_name, path):
