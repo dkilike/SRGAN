@@ -12,7 +12,7 @@ import numpy as np
 def get_imgs_fn(file_name, path):
     """ Input an image path and name, return an image array """
     # return scipy.misc.imread(path + file_name).astype(np.float)
-    return scipy.misc.imread(path + file_name, mode='RGB')
+    return np.expand_dims(scipy.misc.imread(path + file_name), axis=2)
 
 def crop_sub_imgs_fn(x, is_random=True):
     x = crop(x, wrg=384, hrg=384, is_random=is_random)

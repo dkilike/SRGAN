@@ -44,7 +44,7 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
         n = Conv2d(n, 256, (3, 3), (1, 1), act=None, padding='SAME', W_init=w_init, name='n256s1/2')
         n = SubpixelConv2d(n, scale=2, n_out_channel=None, act=tf.nn.relu, name='pixelshufflerx2/2')
 
-        n = Conv2d(n, 3, (1, 1), (1, 1), act=tf.nn.tanh, padding='SAME', W_init=w_init, name='out')
+        n = Conv2d(n, 1, (1, 1), (1, 1), act=tf.nn.tanh, padding='SAME', W_init=w_init, name='out')
         return n
 
 
@@ -101,7 +101,7 @@ def SRGAN_g2(t_image, is_train=False, reuse=False):
         n = BatchNormLayer(n, act=tf.nn.relu,
                 is_train=is_train, gamma_init=g_init, name='up2/batch_norm')
 
-        n = Conv2d(n, 3, (1, 1), (1, 1), act=tf.nn.tanh, padding='SAME', W_init=w_init, name='out')
+        n = Conv2d(n, 1, (1, 1), (1, 1), act=tf.nn.tanh, padding='SAME', W_init=w_init, name='out')
         return n
 
 
@@ -226,31 +226,31 @@ def Vgg19_simple_api(rgb, reuse):
         start_time = time.time()
         print("build model started")
         rgb_scaled = rgb * 255.0
-        # Convert RGB to BGR
-        if tf.__version__ <= '0.11':
-            red, green, blue = tf.split(3, 3, rgb_scaled)
-        else: # TF 1.0
-            # print(rgb_scaled)
-            red, green, blue = tf.split(rgb_scaled, 3, 3)
-        assert red.get_shape().as_list()[1:] == [224, 224, 1]
-        assert green.get_shape().as_list()[1:] == [224, 224, 1]
-        assert blue.get_shape().as_list()[1:] == [224, 224, 1]
-        if tf.__version__ <= '0.11':
-            bgr = tf.concat(3, [
-                blue - VGG_MEAN[0],
-                green - VGG_MEAN[1],
-                red - VGG_MEAN[2],
-            ])
-        else:
-            bgr = tf.concat([
-                blue - VGG_MEAN[0],
-                green - VGG_MEAN[1],
-                red - VGG_MEAN[2],
-            ], axis=3)
-        assert bgr.get_shape().as_list()[1:] == [224, 224, 3]
+        # # Convert RGB to BGR
+        # if tf.__version__ <= '0.11':
+        #     red, green, blue = tf.split(3, 3, rgb_scaled)
+        # else: # TF 1.0
+        #     # print(rgb_scaled)
+        #     red, green, blue = tf.split(rgb_scaled, 3, 3)
+        # assert red.get_shape().as_list()[1:] == [224, 224, 1]
+        # assert green.get_shape().as_list()[1:] == [224, 224, 1]
+        # assert blue.get_shape().as_list()[1:] == [224, 224, 1]
+        # if tf.__version__ <= '0.11':
+        #     bgr = tf.concat(3, [
+        #         blue - VGG_MEAN[0],
+        #         green - VGG_MEAN[1],
+        #         red - VGG_MEAN[2],
+        #     ])
+        # else:
+        #     bgr = tf.concat([
+        #         blue - VGG_MEAN[0],
+        #         green - VGG_MEAN[1],
+        #         red - VGG_MEAN[2],
+        #     ], axis=3)
+        # assert bgr.get_shape().as_list()[1:] == [224, 224, 3]
 
         """ input layer """
-        net_in = InputLayer(bgr, name='input')
+        net_in = InputLayer(rgb_scaled, name='input')
         """ conv1 """
         network = Conv2d(net_in, n_filter=64, filter_size=(3, 3),
                     strides=(1, 1), act=tf.nn.relu,padding='SAME', name='conv1_1')
